@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.minsait.affinity</groupId>
+		<artifactId>affinity-back</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>persistencemodel</artifactId>
+
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<build.profile.id>local</build.profile.id>
+			</properties>
+		</profile>
+		<profile>
+			<id>pre</id>
+			<activation>
+				<property>
+					<name>env.SITE</name>
+					<value>pre</value>
+				</property>
+			</activation>
+			<properties>
+				<build.profile.id>pre</build.profile.id>
+			</properties>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<activation>
+				<property>
+					<name>env.SITE</name>
+					<value>pro</value>
+				</property>
+			</activation>
+			<properties>
+				<build.profile.id>pro</build.profile.id>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-tools</artifactId>
+			<version>5.0.6.Final</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.0.0</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>profiles/${build.profile.id}</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<components>
+						<component>
+							<name>hbm2java</name>
+							<implementation>jdbcconfiguration</implementation>
+							<outputDirectory>src/main/java</outputDirectory>
+						</component>
+					</components>
+					<componentProperties>
+						<revengfile>src/main/resources/hibernate.reveng.xml</revengfile>
+						<packagename>com.minsait.affinity.jpa.model</packagename>
+						<jdk5>true</jdk5>
+						<ejb3>true</ejb3>
+					</componentProperties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>cglib</groupId>
+						<artifactId>cglib-nodep</artifactId>
+						<version>2.2.2</version>
+						<!-- <version>3.3.0</version> -->
+					</dependency>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-tools</artifactId>
+						<version>5.0.6.Final</version>
+					</dependency>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-core</artifactId>
+						<version>5.0.6.Final</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+					<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>42.0.0</version>
+					</dependency>
+
+
+
+
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>
